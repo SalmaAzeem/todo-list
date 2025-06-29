@@ -40,6 +40,14 @@ src/
 └── index.html             # Main HTML file
 ```
 
+## Screenshots
+
+### Calendar Page
+![calendar](screenshots/calendar.jpeg)
+
+### Tasks page
+![tasks](screenshots/tasks.jpeg)
+
 ## License
 
 This project is open source and available under the [MIT License](LICENSE).
