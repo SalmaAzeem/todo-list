@@ -1,0 +1,5 @@
+<div>
+  <a [routerLink]="['/tasks', {date:selectedDate}]">Tasks</a>
+  {{ selectedDate.toLocaleDateString() }}
+  <mat-calendar [(selected)]="selectedDate" ngSkipHydration></mat-calendar>
+</div>
