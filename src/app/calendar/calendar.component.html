@@ -1,5 +1,45 @@
-<div>
-  <a [routerLink]="['/tasks', {date:selectedDate}]">Tasks</a>
-  {{ selectedDate.toLocaleDateString() }}
-  <mat-calendar [(selected)]="selectedDate" ngSkipHydration></mat-calendar>
+<div class="container">
+  <div class="calendar-header">
+    <h2 class="page-title">
+      <span class="material-icons">calendar_today</span>
+      Calendar
+    </h2>
+    <p class="page-subtitle">Select a date to view and manage your tasks</p>
+  </div>
+
+  <div class="calendar-container">
+    <div class="calendar-card card fade-in">
+      <div class="calendar-info">
+        <div class="selected-date-info">
+          <h3 class="selected-date">
+            <span class="material-icons">today</span>
+            {{ selectedDate | date:'fullDate' }}
+          </h3>
+        </div>
+        
+        <div class="calendar-actions">
+          <button 
+            class="btn btn-outline"
+          >
+            <span class="material-icons">today</span>
+            Today
+          </button>
+          <a 
+            [routerLink]="['/tasks', {date: selectedDate.toISOString()}]" 
+            class="btn btn-primary"
+          >
+            <span class="material-icons">list</span>
+            View Tasks
+          </a>
+        </div>
+      </div>
+
+      <div class="calendar-wrapper">
+        <mat-calendar 
+          [(selected)]="selectedDate" 
+          ngSkipHydration
+        ></mat-calendar>
+      </div>
+    </div>
+  </div>
 </div>

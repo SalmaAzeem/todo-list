@@ -1,3 +1,29 @@
-<header>Task List</header>
-<router-outlet />
+<nav class="navbar">
+  <div class="container">
+    <div class="nav-brand">
+      <span class="material-icons">task_alt</span>
+      <h1>TaskFlow</h1>
+    </div>
+    <div class="nav-links">
+      <a routerLink="/" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        <span class="material-icons">calendar_today</span>
+        Calendar
+      </a>
+      <a routerLink="/tasks" class="nav-link" routerLinkActive="active">
+        <span class="material-icons">list</span>
+        Tasks
+      </a>
+    </div>
+  </div>
+</nav>
+
+<main class="main-content">
+  <router-outlet />
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <p>&copy; 2024 TaskFlow. Organize your life, one task at a time.</p>
+  </div>
+</footer>
 

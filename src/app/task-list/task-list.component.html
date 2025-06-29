@@ -1,29 +1,137 @@
 <div class="container">
-  <div class="todo-list">
-    <div class="input-group">
-      <input type="text" placeholder="Add a new task" #newtask>
-      <button (click)="add(newtask.value)" class="add-button">+</button>
+  <div class="task-list-header">
+    <h2 class="page-title">
+      <span class="material-icons">assignment</span>
+      Your Tasks
+    </h2>
+    <p class="page-subtitle">Stay organized and get things done</p>
+  </div>
+
+  <div class="todo-container">
+    <div class="add-task-card card fade-in">
+      <h3 class="section-title">
+        <span class="material-icons">add_circle</span>
+        Add New Task
+      </h3>
+      <div class="input-group">
+        <div class="input-wrapper">
+          <span class="material-icons input-icon">task</span>
+          <input 
+            type="text" 
+            placeholder="What needs to be done?" 
+            #newtask
+            (keyup.enter)="add(newtask.value); newtask.value=''"
+            class="task-input"
+          >
+        </div>
+        <button 
+          (click)="add(newtask.value); newtask.value=''" 
+          class="btn btn-primary add-button"
+        >
+          <span class="material-icons">add</span>
+          Add Task
+        </button>
+      </div>
     </div>
-    <table>
-      <thead>
-        <tr>
-          <th>Task</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let task of tasks; let i = index" [class.even]="i%2==0" [class.odd]="i%2!=0">
-          <td>
-            <p [class.is-done]="task.is_done">{{ task.title }}</p>
-          </td>
-          <td>
-            <button (click)="remove(task)" class="remove-button">X</button>
-            <button (click)="task.toggleIsDone()" class="done-button">
-              {{ task.is_done ? 'Undo' : 'Done' }}
+
+    <div class="tasks-card card fade-in" *ngIf="tasks.length > 0">
+      <div class="card-header">
+        <h3 class="section-title">
+          <span class="material-icons">list_alt</span>
+          Tasks ({{ getActiveTasksCount() }}/{{ tasks.length }})
+        </h3>
+        <div class="task-filters">
+          <button 
+            class="filter-btn" 
+            [class.active]="currentFilter === 'all'"
+            (click)="setFilter('all')"
+          >
+            All
+          </button>
+          <button 
+            class="filter-btn" 
+            [class.active]="currentFilter === 'active'"
+            (click)="setFilter('active')"
+          >
+            Active
+          </button>
+          <button 
+            class="filter-btn" 
+            [class.active]="currentFilter === 'completed'"
+            (click)="setFilter('completed')"
+          >
+            Completed
+          </button>
+        </div>
+      </div>
+
+      <div class="tasks-list">
+        <div 
+          *ngFor="let task of getFilteredTasks(); let i = index; trackBy: trackByTask" 
+          class="task-item fade-in"
+          [class.completed]="task.is_done"
+        >
+          <div class="task-content">
+            <button 
+              class="task-checkbox" 
+              (click)="task.toggleIsDone()"
+              [class.checked]="task.is_done"
+            >
+              <span class="material-icons" *ngIf="task.is_done">check_circle</span>
+              <span class="material-icons" *ngIf="!task.is_done">radio_button_unchecked</span>
             </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+            <div class="task-text">
+              <p [class.completed-text]="task.is_done">{{ task.title }}</p>
+              <small class="task-meta">Created {{ getRelativeTime(task.createdAt) }}</small>
+            </div>
+          </div>
+          <div class="task-actions">
+            <button 
+              (click)="task.toggleIsDone()" 
+              class="btn btn-sm"
+              [ngClass]="task.is_done ? 'btn-outline' : 'btn-success'"
+              [title]="task.is_done ? 'Mark as incomplete' : 'Mark as complete'"
+            >
+              <span class="material-icons">
+                {{ task.is_done ? 'undo' : 'check' }}
+              </span>
+            </button>
+            <button 
+              (click)="remove(task)" 
+              class="btn btn-sm btn-danger"
+              title="Delete task"
+            >
+              <span class="material-icons">delete</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="task-actions-footer" *ngIf="getCompletedTasksCount() > 0">
+        <button 
+          (click)="clearCompleted()" 
+          class="btn btn-outline"
+        >
+          <span class="material-icons">clear_all</span>
+          Clear Completed ({{ getCompletedTasksCount() }})
+        </button>
+      </div>
+    </div>
+
+    <div class="empty-state card fade-in" *ngIf="tasks.length === 0">
+      <div class="empty-icon">
+        <span class="material-icons">task_alt</span>
+      </div>
+      <h3>No tasks yet</h3>
+      <p>Add your first task above to get started!</p>
+    </div>
+
+    <div class="empty-state card fade-in" *ngIf="tasks.length > 0 && getFilteredTasks().length === 0">
+      <div class="empty-icon">
+        <span class="material-icons">filter_list_off</span>
+      </div>
+      <h3>No {{ currentFilter }} tasks</h3>
+      <p>Try switching to a different filter or add some tasks.</p>
+    </div>
   </div>
 </div>
